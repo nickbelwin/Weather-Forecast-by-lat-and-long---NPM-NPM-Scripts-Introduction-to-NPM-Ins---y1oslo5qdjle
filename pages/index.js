@@ -17,14 +17,6 @@ export default function Home() {
     e.preventDefault();
     getWeatherData();
   }
-  const updateData = (e) => {
-    if (e.target.id === "lati") {
-      setLatitude(e.target.value);
-    }
-    else if (e.target.id === "longi") {
-      setLongitude(e.target.value)
-    }
-  }
 
 
   return (
@@ -32,27 +24,31 @@ export default function Home() {
       <div id="root">
         <h1>Weather Forecast</h1>
         <form onSubmit={submitData}>
-          <label for="latitude" >Latitude:</label>
-          <input onChange={updateData} id="lati" type="number" name="latitude" className="latitude" />
-          <label for="longitude" >Longitude:</label>
-          <input onChange={updateData} id="longi" type="number" name="longitude" className="longitude" />
+          <label for="latitude" >Latitude:
+            <input onChange={(e) => { setLatitude(e.target.value); }} id="lati" type="number" value={latitude} className="latitude" /></label>
+          <label for="longitude" >Longitude:
+            <input onChange={(e) => { setLongitude(e.target.value); }} id="longi" type="number" value={longitude} className="longitude" /></label>
           <button type="submit">Get Forecast</button>
         </form>
         <table>
-          <tr>
-            <th>Time</th>
-            <th>Temperature (°C)</th>
-            <th>Summary</th>
-          </tr>
-          {weatherData?.map((val) => {
-            return (
-              <tr>
-                <td>{val.time.toLocaleString()}</td>
-                <td>{val.data.instant.details.air_temperature}</td>
-                <td>{val.data.next_12_hours.summary.symbol_code}</td>
-              </tr>
-            )
-          })}
+          <thead>
+            <tr>
+              <th>Time</th>
+              <th>Temperature (°C)</th>
+              <th>Summary</th>
+            </tr>
+          </thead>
+          <tbody>
+            {weatherData?.map((val) => {
+              return (
+                <tr>
+                  <td>{new Date(val.time).toLocaleString()}</td>
+                  <td>{val.data.instant.details.air_temperature.toFixed(1)}</td>
+                  <td>{val.data.next_1_hours.summary.symbol_code}</td>
+                </tr>
+              )
+            })}
+          </tbody>
         </table>
       </div>
     </>
